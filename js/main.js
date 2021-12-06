@@ -90,14 +90,36 @@ const promotionEl = document.querySelector('.promotion')
 const promotionToggleBtn = document.querySelector('.toggle-promotion')
 let isHidePromotion = false
 
-promotionToggleBtn.addEventListener('click', function(){
+promotionToggleBtn.addEventListener('click', function () {
   isHidePromotion = !isHidePromotion //클릭되면 true로 지정
 
-  if(isHidePromotion){ //숨김처리
+  if (isHidePromotion) { //숨김처리
     promotionEl.classList.add('hide') // promotion에 class hide 추가
 
-  }else{//보임처리
+  } else { //보임처리
     promotionEl.classList.remove('hide') // promotion에 class hide 제거
 
   }
 })
+
+// 범위 랜덤 함수(소수점 2자리까지)
+function random(min, max) {
+  // `.toFixed()`를 통해 반환된 문자 데이터를,
+  // `parseFloat()`을 통해 소수점을 가지는 숫자 데이터로 변환
+  return parseFloat((Math.random() * (max - min) + min).toFixed(2))
+}
+
+//둥둥 떠있는 애니메이션
+function floatingObject(selector, delay, size) {
+  gsap.to(selector, random(1.5, 2.5), { //1.5 ~ 2.5초 사이로 지속시간을 랜덤하게 설정
+    y: size, //y축방향인 아래로 20 내려감
+    repeat: -1, //무한반복
+    yoyo: true, //재생된 애니메이션을 다시 역재생
+    ease: Power1.easeInOut, //반복이 튕기지않고 자연스럽게 연결
+    delay: random(0, delay) //0 ~ 밑의 지연시간사이로 지연시간을 랜덤하게 설정
+  })
+}
+
+floatingObject('.floating1', 1, 15)
+floatingObject('.floating2', .5, 15)
+floatingObject('.floating3', 1.5, 20)
