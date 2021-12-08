@@ -19,22 +19,41 @@ searchInputEl.addEventListener('blur', function () { //블러 되면
 
 
 const badgeEl = document.querySelector('header .badges')
+const toTopEl = document.querySelector('#to-top')
 
 //브라우저 그 자체
 window.addEventListener('scroll', _.throttle(function () { //0.3초 텀을 두어 함수의 반복실행을 통제
-  if (window.scrollY > 500) { //뱃지 숨기기
+  if (window.scrollY > 500) {
+    //뱃지 숨기기
     gsap.to(badgeEl, .6, { //요소, 지속시간, 옵션 추가
       opacity: 0, // 투명하게
       display: 'none' //투명해지지만, 클릭은 되기때문에 아예 없애버리기
     })
-  } else { //뱃지 보이기
+
+    //totop 버튼 보이기
+    gsap.to(toTopEl, .2, {
+      x: 0
+    })
+  } else {
+    //뱃지 보이기
     gsap.to(badgeEl, .6, { //요소, 지속시간, 옵션 추가
       opacity: 1, //보이게
       display: 'block' // 다시 생기기
     })
+
+    //totop 버튼 숨기기
+    gsap.to(toTopEl, .2, {
+      x: 100
+    })
   }
 }, 300))
 
+//totop버튼을 누르면 최상단으로 이동하는 기능
+toTopEl.addEventListener('click', function () {
+  gsap.to(window, .7, { //window = 브라우저 그 자체
+    scrollTo: 0 //화면의 위치를 0px지점으로 옮김
+  })
+})
 
 
 const fadeEls = document.querySelectorAll('.visual .fade-in') //fade-in 클래스를 전부 다 찾음
@@ -65,24 +84,28 @@ new Swiper('.promotion .swiper-container', {
   autoplay: { //자동재생 옵션추가
     delay: 5000 //5초
   },
-
-
-  //.....으로 요소를 지정해 페이지 넘기기
-  pagination: {
+  pagination: { //.....으로 요소를 지정해 페이지 넘기기
     el: '.promotion .swiper-pagination', //페이지 번호 요소 선택자
     clickable: true // 클릭이 가능하게
   },
-
-  //이전과 다음 슬라이드를 볼 수 있는 기능 
-  navigation: {
+  navigation: { //이전과 다음 슬라이드를 볼 수 있는 기능 
     prevEl: '.promotion .swiper-prev', //이전 버튼
     nextEl: '.promotion .swiper-next' //다음 버튼
   }
 
 })
 
-
-
+new Swiper('.awards .swiper-container', {
+  // direction: 'horizontal', // 수평 슬라이드
+  autoplay: true, // 자동 재생
+  loop: true, // 반복 재생
+  spaceBetween: 30, // 슬라이드 사이 여백
+  slidesPerView: 5, // 한번에 보여줄 슬라이드 개수
+  navigation: { //이전과 다음 슬라이드를 볼 수 있는 기능
+    prevEl: '.awards .swiper-prev', // 이전 버튼
+    nextEl: '.awards .swiper-next' // 다음 버튼
+  }
+})
 
 
 //토글 기능 구현
@@ -137,3 +160,7 @@ spyEls.forEach(function (spyEl) {
     .setClassToggle(spyEl, 'show') //show클래스 추가
     .addTo(new ScrollMagic.Controller()) //ScrollMagic 실행에 꼭 필요한 컨트롤러
 })
+
+
+const thisYear = document.querySelector('.this-year')
+thisYear.textContent = new Date().getFullYear() //현재 2021년도 지정
